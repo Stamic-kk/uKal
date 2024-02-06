@@ -16,9 +16,14 @@ exec=ukal_tests
 
 all : $(exec)
 
-$(exec): unit_test.c ukal.o
-	$(cc) $(cc_options) -I$(ukal_src_dir) -I$(ulapack_src_dir) $(ukal_options) $(ulapack_options) ukal.o ulapack.o -lm unit_test.c -o $(exec)
+# $(exec): unit_test.c ukal.o
+# 	$(cc) $(cc_options) -I$(ukal_src_dir) -I$(ulapack_src_dir) $(ukal_options) $(ulapack_options) ukal.o ulapack.o -lm unit_test.c -o $(exec)
 
+$(exec): unit_test.o ukal.o ulapack.o
+	$(cc) $(cc_options)   ukal.o ulapack.o unit_test.o -lm -o $(exec)
+
+unit_test.o: unit_test.c
+	$(cc) $(cc_options) -c -I$(ukal_src_dir) -I$(ulapack_src_dir) unit_test.c $(ukal_options) $(ulapack_options) -o unit_test.o
 ukal.o: ulapack.o $(ukal_src_dir)/ukal.c $(ukal_src_dir)/ukal.c $(ukal_src_dir)/ukal_type.h
 	$(cc) $(cc_options) -I$(ukal_src_dir) -I$(ulapack_src_dir) -c $(ukal_src_dir)/ukal.c $(ukal_options) $(ulapack_options) -o ukal.o
 

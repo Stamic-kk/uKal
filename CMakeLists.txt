@@ -1,0 +1,64 @@
+cmake_minimum_required(VERSION 3.10)
+file(GLOB packSRCKal "src/*.c" )
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/uLAPack)
+add_library(uKal STATIC ${packSRCKal})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/uLAPack/src)
+message(${CMAKE_CURRENT_SOURCE_DIR}/src/uLAPack)
+
+target_include_directories(uKal
+PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/uLAPack
+)
+
+
+target_include_directories(uKal PUBLIC src/uLAPack)
+target_include_directories(uKal PUBLIC src/uLAPack/src)
+message(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_definitions(-DUKAL_MAX_STATE_VECTOR_SIZE=5 -DUKAL_MAX_MEASUREMENT_VECTOR_SIZE=5 
+-DULAPACK_MATRIX_ENTRY_TYPE=double -DULAPACK_INDEX_TYPE=uint64_t 
+-DULAPACK_SIGNED_INDEX_TYPE=int64_t -DULAPACK_USE_STATIC_ALLOC=1 
+-DULAPACK_MAX_MATRIX_N_ROWS=5 -DULAPACK_MAX_MATRIX_N_COLS=5 
+-DULAPACK_INITIALIZE_MEMORY=1 -DULAPACK_INVERSE_VIA_LU=1 -DULAPACK_MINIMUM_THRESHOLD_TOLERANCE=.0001)
+target_compile_definitions(uKal PUBLIC   
+                    DUKAL_MAX_STATE_VECTOR_SIZE DUKAL_MAX_MEASUREMENT_VECTOR_SIZE
+                    DULAPACK_MATRIX_ENTRY_TYPE    DULAPACK_INDEX_TYPE
+                    DULAPACK_SIGNED_INDEX_TYPE   DULAPACK_USE_STATIC_ALLOC
+                    DULAPACK_MAX_MATRIX_N_ROWS    DULAPACK_MAX_MATRIX_N_COLS
+                    DULAPACK_INITIALIZE_MEMORY    DULAPACK_INVERSE_VIA_LU  DULAPACK_MINIMUM_THRESHOLD_TOLERANCE)
+
+find_library(ULAPACK_LIB uLAPack "src/uLAPack")
+message(STATUS "GOT ULAPACK_LIB: ${ULAPACK_LIB}")
+
+target_link_libraries(uKal uLAPack)
+
+
+# cmake_minimum_required(VERSION 3.10)
+# file(GLOB packSRCKal "src/*.c" )
+
+# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/uLAPack/src)
+# # add_subdirectory(src/uLAPack)
+
+
+# add_executable(uKal  ${packSRCKal} tests/unit_test.c)
+# target_include_directories(uKal PUBLIC 
+#       src/uLAPack
+# )
+
+# add_subdirectory(src/uLAPack)
+# target_include_directories(uKal PUBLIC src/uLAPack ${CMAKE_CURRENT_SOURCE_DIR}/src)
+# message(${CMAKE_CURRENT_SOURCE_DIR})
+
+# add_definitions(-DUKAL_MAX_STATE_VECTOR_SIZE=5 -DUKAL_MAX_MEASUREMENT_VECTOR_SIZE=5 
+# -DULAPACK_MATRIX_ENTRY_TYPE=double -DULAPACK_INDEX_TYPE=uint64_t 
+# -DULAPACK_SIGNED_INDEX_TYPE=int64_t -DULAPACK_USE_STATIC_ALLOC=1 
+# -DULAPACK_MAX_MATRIX_N_ROWS=5 -DULAPACK_MAX_MATRIX_N_COLS=5 
+# -DULAPACK_INITIALIZE_MEMORY=1 -DULAPACK_INVERSE_VIA_LU=1 -DULAPACK_MINIMUM_THRESHOLD_TOLERANCE=.0001)
+# target_compile_definitions(uKal PUBLIC   
+#                     DUKAL_MAX_STATE_VECTOR_SIZE DUKAL_MAX_MEASUREMENT_VECTOR_SIZE
+#                     DULAPACK_MATRIX_ENTRY_TYPE    DULAPACK_INDEX_TYPE
+#                     DULAPACK_SIGNED_INDEX_TYPE   DULAPACK_USE_STATIC_ALLOC
+#                     DULAPACK_MAX_MATRIX_N_ROWS    DULAPACK_MAX_MATRIX_N_COLS
+#                     DULAPACK_INITIALIZE_MEMORY    DULAPACK_INVERSE_VIA_LU  DULAPACK_MINIMUM_THRESHOLD_TOLERANCE)
+
+# target_link_libraries(uKal uLAPack)

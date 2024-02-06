@@ -9,3 +9,9 @@
 
 # Test Executables
 ukal_tests
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+```
